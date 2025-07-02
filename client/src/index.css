@@ -153,6 +153,33 @@
   animation: rotateBorder 3s linear infinite;
 }
 
+@keyframes borderLight {
+  0% { 
+    background-position: 0% 50%;
+  }
+  50% { 
+    background-position: 100% 50%;
+  }
+  100% { 
+    background-position: 0% 50%;
+  }
+}
+
+.animate-border-light {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    transparent,
+    hsl(262, 83%, 58%),
+    hsl(322, 84%, 61%),
+    hsl(180, 83%, 58%),
+    transparent,
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: borderLight 3s linear infinite;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
