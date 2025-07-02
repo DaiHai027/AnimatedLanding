@@ -49,9 +49,46 @@ export default function Footer() {
           viewport={{ once: true }}
         >
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-purple-pink rounded-lg flex items-center justify-center">
-                <i className="fas fa-sphere text-white text-sm"></i>
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="relative">
+                <svg width="32" height="32" viewBox="0 0 32 32" className="drop-shadow-lg">
+                  <defs>
+                    <linearGradient id="footerSphereGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style={{stopColor: '#8b5cf6', stopOpacity: 1}} />
+                      <stop offset="50%" style={{stopColor: '#ec4899', stopOpacity: 1}} />
+                      <stop offset="100%" style={{stopColor: '#06b6d4', stopOpacity: 1}} />
+                    </linearGradient>
+                    <linearGradient id="footerInnerGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style={{stopColor: '#ffffff', stopOpacity: 0.3}} />
+                      <stop offset="100%" style={{stopColor: '#ffffff', stopOpacity: 0}} />
+                    </linearGradient>
+                  </defs>
+                  {/* Main sphere */}
+                  <circle cx="16" cy="16" r="14" fill="url(#footerSphereGradient)" />
+                  {/* Inner glow */}
+                  <circle cx="16" cy="16" r="12" fill="url(#footerInnerGlow)" />
+                  {/* Network connections */}
+                  <g stroke="#ffffff" strokeWidth="1.5" fill="none" opacity="0.8">
+                    <path d="M8 12 L24 12" />
+                    <path d="M6 20 L26 20" />
+                    <path d="M16 4 L16 28" />
+                    <path d="M12 6 L20 26" />
+                    <path d="M20 6 L12 26" />
+                  </g>
+                  {/* Connection nodes */}
+                  <g fill="#ffffff">
+                    <circle cx="8" cy="12" r="1.5" />
+                    <circle cx="24" cy="12" r="1.5" />
+                    <circle cx="6" cy="20" r="1.5" />
+                    <circle cx="26" cy="20" r="1.5" />
+                    <circle cx="16" cy="4" r="1.5" />
+                    <circle cx="16" cy="28" r="1.5" />
+                    <circle cx="12" cy="6" r="1.5" />
+                    <circle cx="20" cy="26" r="1.5" />
+                    <circle cx="20" cy="6" r="1.5" />
+                    <circle cx="12" cy="26" r="1.5" />
+                  </g>
+                </svg>
               </div>
               <span className="text-xl font-bold text-gradient-purple-pink">SocialSphere</span>
             </div>
