@@ -27,7 +27,7 @@ class TrailPointClass implements TrailPoint {
     this.x = x;
     this.y = y;
     this.life = 1.0;
-    this.decay = 0.02;
+    this.decay = 0.005; // Slower decay for 4-5 second fade
   }
 
   update(): boolean {
@@ -41,12 +41,12 @@ class TrailPointClass implements TrailPoint {
     ctx.save();
     ctx.globalAlpha = this.life;
     ctx.strokeStyle = `hsl(${270 + (1 - this.life) * 60}, 70%, 60%)`;
-    ctx.lineWidth = 3;
-    ctx.shadowBlur = 15;
+    ctx.lineWidth = 4 * this.life; // Line gets thinner as it fades
+    ctx.shadowBlur = 20 * this.life; // Shadow fades with the line
     ctx.shadowColor = ctx.strokeStyle;
     
     ctx.beginPath();
-    ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+    ctx.arc(this.x, this.y, 3 * this.life, 0, Math.PI * 2); // Circle gets smaller
     ctx.stroke();
     ctx.restore();
   }
@@ -151,8 +151,8 @@ export default function MouseTrailCanvas() {
       if (distance > 5) {
         trailsRef.current.push(new TrailPointClass(mouseRef.current.x, mouseRef.current.y));
         
-        // Limit trail length
-        const maxTrails = 20;
+        // Limit trail length to prevent memory buildup
+        const maxTrails = 100; // Increased for longer trails
         if (trailsRef.current.length > maxTrails) {
           trailsRef.current.shift();
         }
