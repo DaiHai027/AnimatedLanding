@@ -46,7 +46,7 @@ class TrailPointClass implements TrailPoint {
     this.x = x;
     this.y = y;
     this.life = 1.0;
-    this.decay = 0.005; // Slower decay for 4-5 second fade
+    this.decay = 0.03; // Fast decay for quick fade
   }
 
   update(): boolean {
@@ -279,7 +279,7 @@ export default function MouseTrailCanvas() {
         trailsRef.current.push(new TrailPointClass(mouseRef.current.x, mouseRef.current.y));
         
         // Limit trail length to prevent memory buildup
-        const maxTrails = 100; // Increased for longer trails
+        const maxTrails = 30; // Reduced for faster fade
         if (trailsRef.current.length > maxTrails) {
           trailsRef.current.shift();
         }
