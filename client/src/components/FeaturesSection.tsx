@@ -102,15 +102,21 @@ export default function FeaturesSection() {
         >
           {features.map((feature, index) => (
             <motion.div key={index} variants={itemVariants}>
-              <Card className={`group bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 hover:bg-slate-800/80 ${feature.hoverColor} transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl ${feature.shadowColor} h-full`}>
-                <CardContent className="p-0">
-                  <div className={`w-16 h-16 bg-gradient-to-r ${feature.gradient} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                    <i className={`${feature.icon} text-white text-2xl`}></i>
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4 text-white">{feature.title}</h3>
-                  <p className="text-slate-300 leading-relaxed">{feature.description}</p>
-                </CardContent>
-              </Card>
+              <div className="relative group h-full">
+                {/* Animated border */}
+                <div className="absolute -inset-0.5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-border-rotate"></div>
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 rounded-2xl opacity-0 group-hover:opacity-30 blur-sm transition-opacity duration-500"></div>
+                
+                <Card className={`relative bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 hover:bg-slate-800/80 transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl ${feature.shadowColor} h-full`}>
+                  <CardContent className="p-0">
+                    <div className={`w-16 h-16 bg-gradient-to-r ${feature.gradient} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                      <i className={`${feature.icon} text-white text-2xl`}></i>
+                    </div>
+                    <h3 className="text-2xl font-bold mb-4 text-white">{feature.title}</h3>
+                    <p className="text-slate-300 leading-relaxed">{feature.description}</p>
+                  </CardContent>
+                </Card>
+              </div>
             </motion.div>
           ))}
         </motion.div>

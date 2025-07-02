@@ -134,6 +134,25 @@
   100% { transform: translateY(0); opacity: 1; }
 }
 
+@keyframes rotateBorder {
+  0% { 
+    background: linear-gradient(0deg, hsl(262, 83%, 58%), hsl(322, 84%, 61%), hsl(180, 83%, 58%));
+  }
+  33% { 
+    background: linear-gradient(120deg, hsl(262, 83%, 58%), hsl(322, 84%, 61%), hsl(180, 83%, 58%));
+  }
+  66% { 
+    background: linear-gradient(240deg, hsl(262, 83%, 58%), hsl(322, 84%, 61%), hsl(180, 83%, 58%));
+  }
+  100% { 
+    background: linear-gradient(360deg, hsl(262, 83%, 58%), hsl(322, 84%, 61%), hsl(180, 83%, 58%));
+  }
+}
+
+.animate-border-rotate {
+  animation: rotateBorder 3s linear infinite;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
