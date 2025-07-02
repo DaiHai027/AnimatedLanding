@@ -63,7 +63,7 @@
   body {
     @apply font-inter antialiased bg-background text-foreground overflow-x-hidden;
     font-family: 'Inter', system-ui, sans-serif;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M3 21L12 12L21 3' stroke='%23a855f7' stroke-width='2' stroke-linecap='round'/%3E%3Ccircle cx='21' cy='3' r='2' fill='%23a855f7'/%3E%3Cpath d='M19 5L17 7' stroke='%23ec4899' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M17 3L15 5' stroke='%2306b6d4' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M21 1L19 3' stroke='%23ec4899' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") 2 2, auto;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M3 21L12 12L21 3' stroke='%23a855f7' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M21 1L21.6 2.2L23 3L21.6 3.8L21 5L20.4 3.8L19 3L20.4 2.2Z' fill='%23a855f7' stroke='%23ffffff' stroke-width='0.5'/%3E%3Cpath d='M19 5L17 7' stroke='%23ec4899' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M17 3L15 5' stroke='%2306b6d4' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M23 1L21 3' stroke='%23ec4899' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M18.5 0.5L17 2' stroke='%2306b6d4' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E") 2 2, auto;
   }
 
   html {
