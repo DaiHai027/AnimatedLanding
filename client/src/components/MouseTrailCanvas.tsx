@@ -17,6 +17,25 @@ interface Particle {
   size: number;
 }
 
+interface ClickBurst {
+  x: number;
+  y: number;
+  particles: ClickParticle[];
+  life: number;
+  decay: number;
+}
+
+interface ClickParticle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  decay: number;
+  size: number;
+  color: string;
+}
+
 class TrailPointClass implements TrailPoint {
   x: number;
   y: number;
@@ -103,11 +122,119 @@ class ParticleClass implements Particle {
   }
 }
 
+class ClickParticleClass implements ClickParticle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  decay: number;
+  size: number;
+  color: string;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 8 + 2;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.life = 1.0;
+    this.decay = 0.02;
+    this.size = Math.random() * 4 + 2;
+    const colors = ['#a855f7', '#ec4899', '#06b6d4', '#ffffff'];
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  update(): boolean {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vx *= 0.98; // Slight friction
+    this.vy *= 0.98;
+    this.life -= this.decay;
+    return this.life > 0;
+  }
+
+  draw(ctx: CanvasRenderingContext2D): void {
+    if (this.life <= 0) return;
+    
+    ctx.save();
+    ctx.globalAlpha = this.life;
+    ctx.fillStyle = this.color;
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = this.color;
+    
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * this.life, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+class ClickBurstClass implements ClickBurst {
+  x: number;
+  y: number;
+  particles: ClickParticleClass[];
+  life: number;
+  decay: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+    this.life = 1.0;
+    this.decay = 0.01;
+    this.particles = [];
+    
+    // Create burst particles
+    const particleCount = 12;
+    for (let i = 0; i < particleCount; i++) {
+      this.particles.push(new ClickParticleClass(x, y));
+    }
+  }
+
+  update(): boolean {
+    this.life -= this.decay;
+    
+    // Update all particles
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      if (!this.particles[i].update()) {
+        this.particles.splice(i, 1);
+      }
+    }
+    
+    return this.life > 0 && this.particles.length > 0;
+  }
+
+  draw(ctx: CanvasRenderingContext2D): void {
+    // Draw expanding ring
+    if (this.life > 0.7) {
+      ctx.save();
+      ctx.globalAlpha = (this.life - 0.7) * 3;
+      ctx.strokeStyle = '#a855f7';
+      ctx.lineWidth = 3;
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = '#a855f7';
+      
+      const radius = (1 - this.life) * 30;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+    
+    // Draw particles
+    this.particles.forEach(particle => {
+      particle.draw(ctx);
+    });
+  }
+}
+
 export default function MouseTrailCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
   const trailsRef = useRef<TrailPointClass[]>([]);
   const particlesRef = useRef<ParticleClass[]>([]);
+  const clickBurstsRef = useRef<ClickBurstClass[]>([]);
   const mouseRef = useRef({ x: 0, y: 0, lastX: 0, lastY: 0 });
 
   useEffect(() => {
@@ -172,6 +299,25 @@ export default function MouseTrailCanvas() {
       } as MouseEvent);
     };
 
+    const handleClick = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // Create click burst animation
+      clickBurstsRef.current.push(new ClickBurstClass(x, y));
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      handleClick({
+        clientX: touch.clientX + rect.left,
+        clientY: touch.clientY + rect.top
+      } as MouseEvent);
+    };
+
     const animate = () => {
       // Completely clear the canvas background
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -188,6 +334,15 @@ export default function MouseTrailCanvas() {
           trailsRef.current.splice(i, 1);
         } else {
           trailsRef.current[i].draw(ctx);
+        }
+      }
+      
+      // Update and draw click bursts
+      for (let i = clickBurstsRef.current.length - 1; i >= 0; i--) {
+        if (!clickBurstsRef.current[i].update()) {
+          clickBurstsRef.current.splice(i, 1);
+        } else {
+          clickBurstsRef.current[i].draw(ctx);
         }
       }
       
@@ -216,6 +371,8 @@ export default function MouseTrailCanvas() {
 
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('click', handleClick);
+    document.addEventListener('touchstart', handleTouchStart, { passive: false });
     
     animate();
 
@@ -223,6 +380,8 @@ export default function MouseTrailCanvas() {
       window.removeEventListener('resize', resizeCanvas);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('click', handleClick);
+      document.removeEventListener('touchstart', handleTouchStart);
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
