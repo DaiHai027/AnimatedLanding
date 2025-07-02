@@ -100,6 +100,11 @@ Changelog:
   - Konami code activation (↑↑↓↓←→←→BA)
   - Clickable game controller icon in navigation
   - Space shooter gameplay with particles and scoring
+- July 02, 2025. Replaced space shooter with classic brick breaker game
+  - Ball physics with paddle bouncing mechanics
+  - Colorful brick grid with particle effects when destroyed
+  - Score tracking and win/lose conditions
+  - A/D or arrow key controls for paddle movement
 ```
 
 ## User Preferences
