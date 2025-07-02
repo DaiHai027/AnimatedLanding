@@ -42,6 +42,13 @@ export default function Navigation() {
             >
               Contact
             </button>
+            <button 
+              onClick={() => window.dispatchEvent(new CustomEvent('activateEasterEgg'))}
+              className="text-slate-300 hover:text-purple-400 transition-colors duration-200 text-xl"
+              title="Play mini-game"
+            >
+              <i className="fas fa-gamepad"></i>
+            </button>
             <Button className="bg-gradient-purple-pink hover:opacity-90 px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105">
               Sign Up
             </Button>
@@ -76,6 +83,16 @@ export default function Navigation() {
                 className="text-slate-300 hover:text-white transition-colors duration-200 text-left"
               >
                 Contact
+              </button>
+              <button 
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('activateEasterEgg'));
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-slate-300 hover:text-purple-400 transition-colors duration-200 text-left flex items-center gap-2"
+              >
+                <i className="fas fa-gamepad"></i>
+                Play Mini-Game
               </button>
               <Button className="bg-gradient-purple-pink hover:opacity-90 px-4 py-2 rounded-lg font-medium transition-all duration-200 w-fit">
                 Sign Up

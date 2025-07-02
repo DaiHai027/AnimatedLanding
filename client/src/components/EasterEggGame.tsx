@@ -104,8 +104,17 @@ export default function EasterEggGame() {
       }
     };
 
+    const handleActivateEasterEgg = () => {
+      setIsActive(true);
+    };
+
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('activateEasterEgg', handleActivateEasterEgg);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('activateEasterEgg', handleActivateEasterEgg);
+    };
   }, [isActive, gameStarted, checkKonamiCode]);
 
   const spawnEnemy = useCallback(() => {

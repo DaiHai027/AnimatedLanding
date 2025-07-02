@@ -93,6 +93,13 @@ SocialSphere is a modern social media web application built with a full-stack Ty
 ```
 Changelog:
 - July 02, 2025. Initial setup
+- July 02, 2025. Added interactive mouse trail effects with star cursor
+- July 02, 2025. Enhanced CTA section with modern glassmorphism design
+- July 02, 2025. Added animated borders to feature cards
+- July 02, 2025. Implemented Easter egg mini-game "SocialSphere Defender"
+  - Konami code activation (↑↑↓↓←→←→BA)
+  - Clickable game controller icon in navigation
+  - Space shooter gameplay with particles and scoring
 ```
 
 ## User Preferences
