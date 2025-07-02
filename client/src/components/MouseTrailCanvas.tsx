@@ -173,9 +173,8 @@ export default function MouseTrailCanvas() {
     };
 
     const animate = () => {
-      // Clear canvas with slight fade effect
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.1)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Completely clear the canvas background
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       // Update and draw particles
       particlesRef.current.forEach(particle => {
