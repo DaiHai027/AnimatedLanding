@@ -126,6 +126,9 @@ export default function Footer() {
           viewport={{ once: true }}
         >
           <p>&copy; 2024 SocialSphere. All rights reserved. Built with love for the future of social connection.</p>
+          <p className="text-xs mt-2 opacity-50">
+            Hint: Try the classic sequence... ↑↑↓↓←→←→BA 🎮
+          </p>
         </motion.div>
       </div>
     </footer>

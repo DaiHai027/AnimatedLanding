@@ -4,6 +4,7 @@ import HeroSection from '@/components/HeroSection';
 import FeaturesSection from '@/components/FeaturesSection';
 import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
+import EasterEggGame from '@/components/EasterEggGame';
 
 export default function Landing() {
   return (
@@ -16,6 +17,7 @@ export default function Landing() {
         <CTASection />
       </div>
       <Footer />
+      <EasterEggGame />
     </div>
   );
 }
