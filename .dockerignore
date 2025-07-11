@@ -3,20 +3,17 @@ node_modules
 npm-debug.log*
 .npm
 
-# Build output
-dist
+# Build output (keep dist out during build, but not source)
 build
 .next
 
-# Development
+# Development files
 .git
 .gitignore
-README.md
 replit.md
 .replit
-*.md
 
-# Environment
+# Environment files
 .env
 .env.local
 .env.development.local
@@ -38,10 +35,11 @@ coverage
 test-results
 .nyc_output
 
-# Docker
-Dockerfile
-.dockerignore
+# Docker development files
 docker-compose*.yml
 
 # CI/CD
-.github 
+.github
+
+# Documentation (keep CI-CD-README.md as it may be needed)
+README.md 

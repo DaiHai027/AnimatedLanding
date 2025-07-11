@@ -1,33 +1,43 @@
 # Multi-stage Dockerfile for React + Express app
 FROM node:18-alpine AS base
 
-# Install dependencies only when needed
+# Install system dependencies
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat curl
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install only production dependencies
+RUN npm ci --only=production --frozen-lockfile
 
 # Build the application
 FROM base AS builder
 WORKDIR /app
+
+# Install build dependencies
+RUN apk add --no-cache libc6-compat python3 make g++
+
+# Copy package files
 COPY package*.json ./
-RUN npm ci
+
+# Install all dependencies (including dev dependencies for build)
+RUN npm ci --frozen-lockfile
 
 # Copy source code
 COPY . .
 
 # Build the app
+ENV NODE_ENV=production
 RUN npm run build
 
 # Production image
 FROM base AS runner
 WORKDIR /app
+
+# Install runtime dependencies
+RUN apk add --no-cache curl
 
 ENV NODE_ENV=production
 ENV PORT=5000

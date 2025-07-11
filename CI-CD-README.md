@@ -210,13 +210,144 @@ Response:
 - [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
 - [Multi-stage Builds](https://docs.docker.com/develop/dev-best-practices/#use-multi-stage-builds)
 
+## 🔧 Testing and Validation
+
+### Local Build Testing
+Before deploying, you can test the build process locally:
+
+```bash
+# Test the build process
+./scripts/validate-build.sh
+
+# Test Docker build (requires Docker Desktop)
+./scripts/test-docker.sh
+```
+
+### Manual Testing
+```bash
+# Install dependencies
+npm install
+
+# Run type checking
+npm run check
+
+# Build the project
+npm run build
+
+# Start the production server
+npm start
+```
+
+### Docker Testing
+```bash
+# Build Docker image
+docker build -t animated-landing .
+
+# Run Docker container
+docker run -p 5000:5000 animated-landing
+
+# Test health endpoint
+curl http://localhost:5000/api/health
+```
+
 ## 🐛 Troubleshooting
 
 ### Common Issues
-1. **Missing Dependencies**: Run `npm install` to ensure all dependencies are installed
-2. **Docker Build Failures**: Check `.dockerignore` and build context
-3. **Test Failures**: Verify test setup and environment configuration
-4. **Deployment Issues**: Check environment variables and health endpoints
+
+#### 1. **npm Cache Permission Issues**
+```bash
+# If you get EACCES errors
+npm cache clean --force
+
+# Or remove node_modules and reinstall
+rm -rf node_modules package-lock.json
+npm install
+```
+
+#### 2. **Docker Build Failures**
+```bash
+# Check Docker is running
+docker info
+
+# Build with verbose output
+docker build --no-cache -t animated-landing .
+
+# Check build logs
+docker logs <container-id>
+```
+
+#### 3. **Health Check Failures**
+The health endpoint should return:
+```json
+{
+  "status": "healthy",
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "uptime": 3600,
+  "version": "1.0.0"
+}
+```
+
+#### 4. **CI/CD Pipeline Failures**
+- Check GitHub Actions logs for specific errors
+- Verify all required secrets are set
+- Ensure Docker daemon is available in CI environment
+
+#### 5. **Missing Dependencies**
+```bash
+# Install all dependencies including dev dependencies
+npm install
+
+# For production-only dependencies
+npm ci --only=production
+```
+
+#### 6. **Build Output Issues**
+Expected build structure:
+```
+dist/
+├── index.js          # Server build
+└── public/           # Client build
+    ├── index.html
+    ├── assets/
+    └── ...
+```
+
+### Environment-Specific Issues
+
+#### Development
+```bash
+# Use development Docker image
+docker-compose --profile dev up
+
+# Or run locally
+npm run dev
+```
+
+#### Production
+```bash
+# Use production Docker image
+docker-compose up
+
+# Or build and run locally
+npm run build
+npm start
+```
+
+### Performance Issues
+
+#### Build Time Optimization
+- Use Docker layer caching
+- Optimize dependency installation
+- Use multi-stage builds (already implemented)
+
+#### Runtime Performance
+- Check container resource limits
+- Monitor memory usage
+- Use health check endpoints
 
 ### Support
-For issues or questions, please check the workflow logs in the GitHub Actions tab or create an issue in the repository. 
+For issues or questions:
+1. Check the workflow logs in the GitHub Actions tab
+2. Review the troubleshooting steps above
+3. Test locally with the provided scripts
+4. Create an issue in the repository with detailed error logs 
