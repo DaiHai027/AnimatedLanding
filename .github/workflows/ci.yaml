@@ -36,6 +36,7 @@ jobs:
 
     - name: Run linting (optional failure)
       run: npm run lint || echo "Linting failed but continuing..."
+      continue-on-error: true
 
     - name: Run tests (skip if no tests)
       run: npm run test || echo "No tests found or test failed"

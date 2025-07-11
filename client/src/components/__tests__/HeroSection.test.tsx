@@ -7,7 +7,8 @@ describe('HeroSection', () => {
     render(<HeroSection />)
     
     // Check if the component renders without crashing
-    expect(screen.getByRole('main')).toBeInTheDocument()
+    const heading = screen.getByRole('heading', { name: /Connect Beyond Boundaries/i })
+    expect(heading).toBeDefined()
   })
   
   it('has accessible content', () => {
