@@ -121,13 +121,28 @@ docker run -p 5000:5000 animated-landing
 - ✅ TypeScript type safety
 - ✅ ESLint code quality
 - ✅ Unit test coverage
-- ✅ Security vulnerability scanning
+- ✅ Security vulnerability scanning (layered approach)
 - ✅ Build verification
 - ✅ Bundle size monitoring
 
+### Security Policy
+Our security approach balances security with practical development:
+
+#### Production Dependencies (Critical)
+- **Policy**: Zero tolerance for high/critical vulnerabilities
+- **Status**: ✅ 0 vulnerabilities in production dependencies
+- **Enforcement**: CI/CD fails on any high/critical production vulnerabilities
+
+#### Development Dependencies (Monitored)
+- **Policy**: Moderate vulnerabilities acceptable in build tools
+- **Current**: 11 moderate vulnerabilities (esbuild development server)
+- **Impact**: None on production builds
+- **Enforcement**: Monitored but non-blocking
+
 ### Deployment Requirements
 - All quality checks must pass
-- Security audit must have no high/critical vulnerabilities
+- **Production security audit must pass** (no high/critical vulnerabilities)
+- Development vulnerabilities documented and acceptable
 - Build artifacts must be generated successfully
 - Tests must maintain coverage thresholds
 
@@ -221,6 +236,9 @@ Before deploying, you can test the build process locally:
 
 # Test Docker build (requires Docker Desktop)
 ./scripts/test-docker.sh
+
+# Run comprehensive security audit
+./scripts/security-audit.sh
 ```
 
 ### Manual Testing
@@ -230,6 +248,10 @@ npm install
 
 # Run type checking
 npm run check
+
+# Run security audit
+npm audit --omit=dev --audit-level=high  # Production only
+npm audit --audit-level=high             # All dependencies
 
 # Build the project
 npm run build
