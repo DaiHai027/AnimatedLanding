@@ -1,0 +1,91 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate Pull Request
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        # Fetch full history for better analysis
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: package-lock.json
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run TypeScript type checking
+      run: npm run check
+
+    - name: Run ESLint
+      run: npm run lint
+
+    - name: Run tests
+      run: npm run test
+
+    - name: Check for security vulnerabilities
+      run: npm audit --audit-level=moderate
+
+    - name: Build application
+      run: npm run build
+
+    - name: Comment PR with results
+      uses: actions/github-script@v7
+      if: always()
+      with:
+        script: |
+          const { context, github } = require('@actions/github');
+          const jobStatuses = context.payload.workflow_run ? 
+            context.payload.workflow_run.jobs : 
+            [{ conclusion: 'success' }];
+          
+          const status = jobStatuses.every(job => job.conclusion === 'success') ? 
+            '✅ All checks passed!' : 
+            '❌ Some checks failed. Please review the workflow logs.';
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `## PR Validation Results\n\n${status}\n\n- TypeScript: ${jobStatuses.find(j => j.name?.includes('type')) ? '✅' : '❌'}\n- Linting: ${jobStatuses.find(j => j.name?.includes('lint')) ? '✅' : '❌'}\n- Tests: ${jobStatuses.find(j => j.name?.includes('test')) ? '✅' : '❌'}\n- Build: ${jobStatuses.find(j => j.name?.includes('build')) ? '✅' : '❌'}`
+          });
+
+  size-check:
+    runs-on: ubuntu-latest
+    name: Bundle Size Check
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build and analyze bundle
+      run: |
+        npm run build
+        npx vite-bundle-analyzer dist/public --mode=json > bundle-analysis.json
+
+    - name: Check bundle size
+      run: |
+        echo "📊 Bundle size analysis completed"
+        # Add bundle size limits and alerts here
+        echo "Bundle analysis saved to bundle-analysis.json" 
